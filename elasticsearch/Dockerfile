@@ -37,6 +37,8 @@ ENV ELASTIC_CLUSTER="false" \
 
 COPY config/entrypoint.sh /entrypoint.sh 
 
+RUN chown elasticsearch:elasticsearch /usr/share/elasticsearch/data -R
+
 RUN chmod 755 /entrypoint.sh
 
 COPY --chown=elasticsearch:elasticsearch ./config/load_settings.sh ./

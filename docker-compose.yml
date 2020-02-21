@@ -16,23 +16,27 @@ services:
     image: wazuh/wazuh-elasticsearch:3.11.3_7.5.2
     hostname: elasticsearch
     restart: always
+    volumes:
+      - esdata:/usr/share/elasticsearch/data:rw
     ports:
       - "9200:9200"
     environment:
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_CLUSTER=true
       - CLUSTER_NODE_MASTER=true
-      - CLUSTER_MASTER_NODE_NAME=es01
+      - CLUSTER_MASTER_NODE_NAME=ES01
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 2g
+    mem_limit: 1g
 
   kibana:
     image: wazuh/wazuh-kibana:3.11.3_7.5.2
     hostname: kibana
     restart: always
+    ports:
+      - "5601:5601"
     depends_on:
       - elasticsearch
     links:
@@ -42,9 +46,11 @@ services:
     image: wazuh/wazuh-nginx:3.11.3_7.5.2
     hostname: nginx
     restart: always
+    volumes:
+      - /data/docker/wazuh-docker/kibana.htpasswd:/etc/nginx/conf.d/kibana.htpasswd
     environment:
       - NGINX_PORT=443
-      - NGINX_CREDENTIALS
+      - NGINX_CREDENTIALS=user1:phunh123;
     ports:
       - "80:80"
       - "443:443"
@@ -52,3 +58,7 @@ services:
       - kibana
     links:
       - kibana:kibana
+
+volumes:
+  esdata:
+    driver: local

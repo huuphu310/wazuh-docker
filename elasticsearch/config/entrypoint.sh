@@ -8,6 +8,7 @@ set -e
 # Files created by Elasticsearch should always be group writable too
 umask 0002
 
+
 run_as_other_user_if_needed() {
   if [[ "$(id -u)" == "0" ]]; then
     # If running as root, drop to specified UID and run command

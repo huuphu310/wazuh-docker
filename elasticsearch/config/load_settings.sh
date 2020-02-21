@@ -56,5 +56,4 @@ curl -X PUT "$el_url/_all/_settings" -H 'Content-Type: application/json' -d'
 }
 '
 
-
 echo "Elasticsearch is ready."
